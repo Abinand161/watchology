@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShopJS | Ecommerce Website</title>
+  <style>
+    :root{--accent:#0ea5a4;--bg:#f6fbff;--card:#ffffff;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:var(--bg);color:#0f172a}
+
+    nav{background:var(--accent);color:white;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;position:sticky;top:0;z-index:10}
+    nav .logo{font-size:22px;font-weight:700;letter-spacing:1px}
+    nav ul{list-style:none;display:flex;gap:20px;margin:0;padding:0}
+    nav ul li a{color:white;text-decoration:none;font-weight:500;transition:opacity .3s}
+    nav ul li a:hover{opacity:0.8}
+    .nav-actions{display:flex;align-items:center;gap:12px}
+    .btn{background:white;color:var(--accent);padding:8px 12px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
+
+    main{padding:24px}
+    h1{text-align:center;margin-top:20px;color:#0f172a}
+    .product-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  justify-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  width: 220px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 15px;
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+.product-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.product-card {
+  background: #ffffff;
+  border-radius: 10px;
+  width: 220px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); 
+  padding: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.image-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center
+  gap: 25px;
+  margin: 40px auto;
+  padding: 0 30px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.image-box img {
+  width: 180px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.image-box img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+.cart-popup {
+  display: none; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px); 
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.cart-popup-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.cart-popup-content img {
+  width: 200px;
+  height: 140px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.cart-popup-content p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+#popupAddBtn {
+  background-color: #ffb400;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#popupAddBtn:hover {
+  background-color: #ff9f00;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #333;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+ body {
+      font-family: Arial, sans-serif;
+      background: #f5faff;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background: #0ea5a4;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+    }
+
+    nav .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    nav button {
+      background-color: #ffcc00;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .products {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 40px;
+      gap: 20px;
+    }
+
+    .product {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 30%;
+      min-width: 250px;
+      text-align: center;
+      padding: 15px;
+      transition: transform 0.3s;
+    }
+
+    .product:hover {
+      transform: scale(1.03);
+    }
+
+    .product img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .price {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .add-btn {
+      background: #0ea5a4;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .add-btn:hover {
+      background: #0c8c8b;
+    }
+   
+.extra-pizzas {
+  margin: 50px auto;
+  text-align: center;
+}
+
+.extra-pizza-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  justify-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.image-box {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  padding: 15px;
+  width: 220px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.image-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.image-box img {
+  width: 180px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.image-box p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 8px 0;
+}
+
+.image-box .add-cart {
+  background-color: #ffb400;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.image-box .add-cart:hover {
+  background-color: #ff9f00;
+}
+.product-popup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.product-popup-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 900px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.close-product {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 28px;
+  color: #333;
+  cursor: pointer;
+}
+.about-popup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.about-content {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  line-height: 1.6;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.close-about {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 28px;
+  color: #333;
+  cursor: pointer;
+}
+.contact-popup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.contact-content {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  width: 85%;
+  max-width: 700px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.close-contact {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 28px;
+  color: #333;
+  cursor: pointer;
+}
+
+.contact-info {
+  text-align: left;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  width: 100%;
+}
+
+.contact-form button {
+  background: #0ea5a4;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.contact-form button:hover {
+  background: #0c8583;
+}
+h1{
+  align-items: center;
+}
+footer {
+  background-color: var(--accent);
+  color: white;
+  margin-top: 50px;
+  padding-top: 40px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 30px;
+  padding: 0 40px 30px;
+}
+
+.footer-section h3, 
+.footer-section h4 {
+  margin-bottom: 15px;
+}
+
+.footer-section p {
+  line-height: 1.6;
+  color: #f8fafc;
+  font-size: 14px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  transition: opacity 0.3s;
+}
+
+.footer-section ul li a:hover {
+  opacity: 0.8;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.social-icons img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s;
+}
+
+.social-icons img:hover {
+  transform: scale(1.2);
+}
+
+.footer-bottom {
+  background: #0c8c8b;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">WATCHOLOGY</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#" id="productLink"> Most Selled Products</a></li>
+      <li><a href="#" id="aboutLink">About</a></li>
+      <li><a href="#" id="contactLink">Contact</a></li>
+
+      
+    </ul>
+    
+   <div class="nav-actions">
+  <button class="btn" id="loginBtn">Login</button>
+  <button class="btn" id="registerBtn">Register</button>
+  <button class="btn" id="cartBtn" onclick="window.location.href='cart.html'">Cart 🛒</button>
+</div>
+
+  </nav>
+
+  <main>
+    <h1>Welcome to the World of Watch</h1>
+    <p style="text-align:center;max-width:600px;margin:10px auto;font-size:18px;">Have a Look! <br>Make your appearance much better by our collections <br><br><b>Less Collections Makes Your <br> Perfect Selection</b></p>
+  </main>
+  
+    <h1>Most Selled</h1>
+  <section class="products">
+    
+    <div class="product-container">
+        
+      <div class="product-card">
+        <img src="https://images-cdn.ubuy.gl/675a6d12bac4a004d15e4fe3-poedagar-luxury-men-quartz-watch.jpg" alt="Product 1">
+        <h3>POEDAGAR</h3>
+
+      </div>
+
+      <div class="product-card">
+        <img src="https://m.media-amazon.com/images/I/915dRJUSW1L._AC_UY1000_.jpg" alt="Product 2">
+        <h3>DANEIL KLEIN</h3>
+      
+      </div>
+
+      <div class="product-card">
+        <img src="https://trpwatchcollection.com/cdn/shop/files/IMG-8809.jpg?v=1747313677&width=1445" alt="Product 3">
+        <h3>ROLEX</h3>
+        
+      </div>
+
+      <div class="product-card">
+        <img src="https://m.media-amazon.com/images/I/71R3B2BQyNL._AC_SX466_.jpg" alt="Product 4">
+        <h3>BENYAR</h3>
+    
+      </div>
+
+      <div class="product-card">
+        <img src="https://m.media-amazon.com/images/I/716TJLo-4yL._AC_UL1001_.jpg" alt="Product 5">
+        <h3>LIGE</h3>
+  
+      </div>
+
+      <div class="product-card">
+        <img src="https://funkytradition.com/cdn/shop/files/curren-top-brand-luxury-mens-watches-male-clocks-date-sport-military-clock-leather-strap-quartz-business-men-watch-gift-funkytradition-668546.jpg?crop=center&height=1000&v=1723520150&width=1000" alt="Product 6">
+        <h3>CURREN</h3>
+    
+      
+      </div>
+    </div>
+  </section>
+
+
+<section class="image-row">
+  <div class="image-box" data-price="$9.99">
+    <img src="https://images-cdn.ubuy.co.in/65ebd13aa496cc761a5ae72b-poedagar-men-watch-top-brand-luxury.jpg" alt="Pizza 1">
+  </div>
+  <div class="image-box" data-price="$11.49">
+    <img src="https://i5.walmartimages.com/seo/POEDAGAR-Top-Brand-Luxury-Men-Watch-Waterproof-Luminous-Stainless-Steel-Watches-Sport-Quartz-Clock-Mens-Date-Business-Wristwatch_20c71273-e2e2-4e56-a05c-83037540df9e.ae83db4f779f472bd102d60fa6170914.jpeg" alt="Pizza 2">
+  </div>
+  <div class="image-box" data-price="$8.99">
+    <img src="https://i.ebayimg.com/images/g/TIMAAOSwx71jC3sg/s-l1200.jpg" alt="Pizza 3">
+  </div>
+  <div class="image-box" data-price="$10.99">
+    <img src="https://i.ebayimg.com/images/g/fesAAOSwAfljE4e6/s-l1200.webp" alt="Pizza 4">
+  </div>
+  <div class="image-box" data-price="$12.99">
+    <img src="https://i5.walmartimages.com/seo/POEDAGAR-Top-Brand-Luxury-Mens-Watches-Luminous-Waterproof-Stainless-Steel-Watch-Men-Date-Calendar-Business-Quartz-Wristwatch_092f0613-08ba-4c2c-a403-6100f8258912.70750831b66d48fe369a7168a8263427.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF" alt="Pizza 5">
+  </div>
+  <div class="image-box" data-price="$13.49">
+    <img src="https://i.ebayimg.com/images/g/GPsAAOSwe2Fj~1Ym/s-l400.jpg" alt="Pizza 6">
+  </div>
+</section>
+<div class="cart-popup" id="cartPopup">
+  <div class="cart-popup-content">
+    <span class="close-btn">&times;</span>
+    <img id="popupImage" src="" alt="Pizza">
+    <p id="popupPrice"></p>
+    <button id="popupAddBtn">Add to Cart</button>
+    
+  </div>
+</div>
+
+<script>
+const popup = document.getElementById('cartPopup');
+const popupImg = document.getElementById('popupImage');
+const popupPrice = document.getElementById('popupPrice');
+const closeBtn = document.querySelector('.close-btn');
+const addBtn = document.getElementById('popupAddBtn');
+let currentItem = {};
+
+document.querySelectorAll('.image-box').forEach(box => {
+  const img = box.querySelector('img');
+  const price = box.getAttribute('data-price');
+
+  img.addEventListener('click', () => {
+    popupImg.src = img.src;
+    popupPrice.textContent = `Price: ${price}`;
+    currentItem = { image: img.src, price: price };
+    popup.style.display = 'flex';
+  });
+});
+closeBtn.addEventListener('click', () => popup.style.display = 'none');
+window.addEventListener('click', e => { if (e.target === popup) popup.style.display = 'none'; });
+
+
+addBtn.addEventListener('click', () => {
+  let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+  cart.push(currentItem);
+  localStorage.setItem('cartItems', JSON.stringify(cart));
+  popup.style.display = 'none';
+  alert('✅ Item added to cart!');
+});
+
+</script>
+<script>
+const popup = document.getElementById('cartPopup');
+const popupImg = document.getElementById('popupImage');
+const popupPrice = document.getElementById('popupPrice');
+const closeBtn = document.querySelector('.close-btn');
+const addBtn = document.getElementById('popupAddBtn');
+let currentItem = {};
+
+
+document.querySelectorAll('.image-box img').forEach(img => {
+  const box = img.closest('.image-box');
+  const price = box.getAttribute('data-price');
+
+  img.addEventListener('click', () => {
+    popupImg.src = img.src;
+    popupPrice.textContent = `Price: ${price}`;
+    currentItem = { image: img.src, price: price };
+    popup.style.display = 'flex';
+  });
+});
+
+closeBtn.addEventListener('click', () => popup.style.display = 'none');
+window.addEventListener('click', e => { if (e.target === popup) popup.style.display = 'none'; });
+
+addBtn.addEventListener('click', () => {
+  let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+  cart.push(currentItem);
+  localStorage.setItem('cartItems', JSON.stringify(cart));
+  popup.style.display = 'none';
+  alert('✅ Item added to cart!');
+});
+</script>
+
+<div class="product-popup" id="productPopup">
+  <div class="product-popup-content">
+    <span class="close-product">&times;</span>
+    <h2 style="color:#0ea5a4;">Our Featured Products</h2>
+    <div class="popup-product-grid">
+      <div class="image-box" data-price="$9.99">
+        <img src="https://images-cdn.ubuy.co.in/65ebd13aa496cc761a5ae72b-poedagar-men-watch-top-brand-luxury.jpg" alt="Product 1">
+      </div>
+      <div class="image-box" data-price="$11.49">
+        <img src="https://m.media-amazon.com/images/I/915dRJUSW1L._AC_UY1000_.jpg" alt="Product 2">
+      </div>
+      <div class="image-box" data-price="$12.99">
+        <img src="https://trpwatchcollection.com/cdn/shop/files/IMG-8809.jpg?v=1747313677&width=1445" alt="Product 3">
+      </div>
+      <div class="image-box" data-price="$10.99">
+        <img src="https://m.media-amazon.com/images/I/71R3B2BQyNL._AC_SX466_.jpg" alt="Product 4">
+      </div>
+      <div class="image-box" data-price="$13.49">
+        <img src="https://m.media-amazon.com/images/I/716TJLo-4yL._AC_UL1001_.jpg" alt="Product 5">
+      </div>
+      <div class="image-box" data-price="$14.49">
+        <img src="https://funkytradition.com/cdn/shop/files/curren-top-brand-luxury-mens-watches-male-clocks-date-sport-military-clock-leather-strap-quartz-business-men-watch-gift-funkytradition-668546.jpg?crop=center&height=1000&v=1723520150&width=1000" alt="Product 6">
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const productPopup = document.getElementById('productPopup');
+const productLink = document.getElementById('productLink');
+const closeProduct = document.querySelector('.close-product');
+
+productLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  productPopup.style.display = 'flex';
+});
+
+
+closeProduct.addEventListener('click', () => {
+  productPopup.style.display = 'none';
+});
+
+
+window.addEventListener('click', (e) => {
+  if (e.target === productPopup) productPopup.style.display = 'none';
+});
+</script>
+
+<div class="about-popup" id="aboutPopup">
+  <div class="about-content">
+    <span class="close-about">&times;</span>
+    <h2>About <span style="color:#0ea5a4;">Watchology</span></h2>
+    <p>
+      Welcome to <strong>Watchology</strong> — your one-stop destination for stylish, modern, and affordable watches.
+      We believe that time is more than just numbers on a dial; it’s a reflection of your personality.
+      Our mission is to bring you a curated collection of premium-quality watches that combine elegance and innovation.
+    </p>
+    <p>
+      Founded in 2025, Watchology is driven by passion and precision. 
+      We focus on delivering top-notch craftsmanship, reliable performance, and timeless design — all at fair prices.
+      Whether you're looking for a casual, classic, or luxury piece, we’ve got something special for you.
+    </p>
+    <p style="font-weight:bold; color:#0ea5a4;">Run Purchase Run</p>
+  </div>
+</div>
+<script>
+const aboutLink = document.getElementById('aboutLink');
+const aboutPopup = document.getElementById('aboutPopup');
+const closeAbout = document.querySelector('.close-about');
+
+
+aboutLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  aboutPopup.style.display = 'flex';
+});
+
+
+closeAbout.addEventListener('click', () => {
+  aboutPopup.style.display = 'none';
+});
+
+
+window.addEventListener('click', (e) => {
+  if (e.target === aboutPopup) aboutPopup.style.display = 'none';
+});
+</script>
+
+<div class="contact-popup" id="contactPopup">
+  <div class="contact-content">
+    <span class="close-contact">&times;</span>
+    <h2><span style="color:#0ea5a4;">Watchology</span></h2>
+    <p>Let us know about ourself</p>
+
+    <div class="contact-info">
+      <p><strong>📍 Address:</strong> Ramanattukara, Kunnamkulam, India</p>
+      <p><strong>📞 Phone:</strong> +91 9876543210</p>
+      <p><strong>✉️ Email:</strong> watchology@gmail.com</p>
+    </div>
+
+    <form class="contact-form" onsubmit="sendMessage(event)">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <textarea id="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+</div>
+<script>
+const contactLink = document.getElementById('contactLink');
+const contactPopup = document.getElementById('contactPopup');
+const closeContact = document.querySelector('.close-contact');
+
+
+contactLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  contactPopup.style.display = 'flex';
+});
+
+
+closeContact.addEventListener('click', () => {
+  contactPopup.style.display = 'none';
+});
+
+
+window.addEventListener('click', (e) => {
+  if (e.target === contactPopup) contactPopup.style.display = 'none';
+});
+
+function sendMessage(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  alert(`Thank you, ${name}! Your message has been sent successfully.`);
+  contactPopup.style.display = 'none';
+}
+</script>
+
+<div class="cart-popup" id="loginPopup">
+  <div class="cart-popup-content">
+    <span class="close-btn" id="closeLogin">&times;</span>
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" required style="width:90%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #ccc;">
+      <input type="password" id="loginPassword" placeholder="Password" required style="width:90%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #ccc;">
+      <button type="submit" class="btn" style="width:100%;">Login</button>
+    </form>
+    <p style="margin-top:10px;">Don’t have an account? <a href="#" id="openRegister" style="color:var(--accent);text-decoration:none;">Register</a></p>
+  </div>
+</div>
+
+
+<div class="cart-popup" id="registerPopup">
+  <div class="cart-popup-content">
+    <span class="close-btn" id="closeRegister">&times;</span>
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="text" id="registerName" placeholder="Full Name" required style="width:90%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #ccc;">
+      <input type="email" id="registerEmail" placeholder="Email" required style="width:90%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #ccc;">
+      <input type="password" id="registerPassword" placeholder="Password" required style="width:90%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #ccc;">
+      <button type="submit" class="btn" style="width:100%;">Register</button>
+    </form>
+    <p style="margin-top:10px;">Already have an account? <a href="#" id="openLogin" style="color:var(--accent);text-decoration:none;">Login</a></p>
+  </div>
+</div>
+<script>
+const loginPopup = document.getElementById('loginPopup');
+const registerPopup = document.getElementById('registerPopup');
+const loginBtn = document.getElementById('loginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const closeLogin = document.getElementById('closeLogin');
+const closeRegister = document.getElementById('closeRegister');
+
+
+loginBtn.onclick = () => { loginPopup.style.display = 'flex'; }
+registerBtn.onclick = () => { registerPopup.style.display = 'flex'; }
+
+
+closeLogin.onclick = () => loginPopup.style.display = 'none';
+closeRegister.onclick = () => registerPopup.style.display = 'none';
+
+
+window.onclick = (e) => {
+  if (e.target === loginPopup) loginPopup.style.display = 'none';
+  if (e.target === registerPopup) registerPopup.style.display = 'none';
+};
+
+
+document.getElementById('openRegister').onclick = (e) => {
+  e.preventDefault();
+  loginPopup.style.display = 'none';
+  registerPopup.style.display = 'flex';
+};
+document.getElementById('openLogin').onclick = (e) => {
+  e.preventDefault();
+  registerPopup.style.display = 'none';
+  loginPopup.style.display = 'flex';
+};
+
+
+document.getElementById('registerForm').onsubmit = (e) => {
+  e.preventDefault();
+  const name = document.getElementById('registerName').value;
+  const email = document.getElementById('registerEmail').value;
+  const password = document.getElementById('registerPassword').value;
+
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  if (users.find(u => u.email === email)) {
+    alert('⚠️ Email already registered!');
+    return;
+  }
+
+  users.push({ name, email, password });
+  localStorage.setItem('users', JSON.stringify(users));
+  alert('✅ Registered successfully! You can log in now.');
+  registerPopup.style.display = 'none';
+  loginPopup.style.display = 'flex';
+};
+
+
+document.getElementById('loginForm').onsubmit = (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const user = users.find(u => u.email === email && u.password === password);
+
+  if (user) {
+    alert(`✅ Welcome back, ${user.name}!`);
+    localStorage.setItem('loggedInUser', JSON.stringify(user));
+    loginPopup.style.display = 'none';
+  } else {
+    alert('❌ Incorrect email or password.');
+  }
+};
+</script>
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>WATCHOLOGY</h3>
+      <p>Deliciousness delivered to your doorstep. We craft premium pizzas and luxury watches with care and passion.</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#" id="footerHome">Home</a></li>
+        <li><a href="#" id="footerProducts">Products</a></li>
+        <li><a href="#" id="footerAbout">About</a></li>
+        <li><a href="#" id="footerContact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Contact Us</h4>
+      <p>Email: support@pizzalogy.com</p>
+      <p>Phone: +91 98765 43210</p>
+      <p>Address: Kochi, Kerala, India</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Follow Us</h4>
+      <div class="social-icons">
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram"></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 WATCHOLOGY. All Rights Reserved.</p>
+  </div>
+</footer>
+<script>
+
+const footerProducts = document.getElementById('footerProducts');
+const footerAbout = document.getElementById('footerAbout');
+const footerContact = document.getElementById('footerContact');
+
+
+footerProducts.addEventListener('click', (e) => {
+  e.preventDefault();
+  const productPopup = document.getElementById('productPopup'); 
+  if (productPopup) {
+    productPopup.style.display = 'flex';
+  } else {
+    alert("Products section not found!");
+  }
+});
+
+
+footerAbout.addEventListener('click', (e) => {
+  e.preventDefault();
+  const aboutPopup = document.getElementById('aboutPopup');
+  if (aboutPopup) {
+    aboutPopup.style.display = 'flex';
+  } else {
+    alert("About section not found!");
+  }
+});
+
+
+footerContact.addEventListener('click', (e) => {
+  e.preventDefault();
+  const contactPopup = document.getElementById('contactPopup');
+  if (contactPopup) {
+    contactPopup.style.display = 'flex';
+  } else {
+    alert("Contact section not found!");
+  }
+});
+</script>
+
+
+</body>
+</html>
+</body>
+</html>
